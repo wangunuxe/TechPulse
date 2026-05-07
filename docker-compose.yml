@@ -1,0 +1,97 @@
+services:
+  postgres: #metadatabase
+    image: postgres:15
+    environment:
+      POSTGRES_USER:${POSTGRES_USER}
+      POSTGRES_PASSERWORD:${POSTGRES_PASSERWORD}
+      POSTGRES_DB:${POSTGRES_DB}
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}"] 
+      interval: 5s
+      timeout: 30s
+      retries: 5
+      start_period: 30s #warmup
+    volumes:
+      - airflow-meta-db:/var/lib/postgresql/data
+  stock-db: #custom database
+    image: postgres:15
+    environment:
+      POSTGRES_USER: ${STOCK_DB_USER}
+      POSTGRES_PASSWORD: ${STOCK_DB_PASSWORD}
+      POSTGRES_DB: ${STOCK_DB_NAME}
+    ports: 
+      - "5433:5432"
+    volumes:
+      - stock-db-data:/var/lib/posgresql/data 
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  airflow-init:
+    image: apache/airflow:2.9.0
+    command: version 
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor 
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: ${AIRFLOW_DB_CONN}
+      AIRFLOW__CORE__FERNET_KEY: ""
+      #初始化专属变量
+      _AIRFLOW_DB_MIGRATE: "true"
+      _AIRFLOW_WWW_USER_CREATE: "true" #创建登录 UI 的管理员账号
+      _AIRFLOW_WWW_USER_USERNAME: ${AIRFLOW_WWW_USER_USERNAME} 
+      _AIRFLOW_WWW_USER_PASSWORD: ${AIRFLOW_WWW_USER_PASSWORD}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  airflow-webserver: # Airflow UI
+    image: apache/airflow:2.9.0
+    command: webserver
+    ports:
+      - "8080:8080"
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: ${AIRFLOW_DB_CONN}
+      AIRFLOW__CORE__FERNET_KEY: ""
+      AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "true"
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+
+      STOCK_DB_HOST: ${STOCK_DB_HOST}
+      STOCK_DB_NAME: ${STOCK_DB_NAME}
+      STOCK_DB_USER: ${STOCK_DB_USER}
+      STOCK_DB_PASSWORD: ${STOCK_DB_PASSWORD}
+    volumes:
+      -./dags: /opt/airflow/dags # Bind mount 
+      -./scripts: /opt/airflow/scripts #Bind mount
+      -airflow-logs: /opt/airflow/logs
+      # ./logs:/opt/airflow/logs   # 这样本地会出现一个 logs 文件夹
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  airflow-scheduler: # Airflow scheduler
+    image: apache/airflow:2.9.0
+    command: scheduler
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: ${AIRFLOW_DB_CONN}
+      AIRFLOW__CORE__FERNET_KEY: ""
+
+      AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "true"
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      
+      STOCK_DB_HOST: ${STOCK_DB_HOST}
+      STOCK_DB_NAME: ${STOCK_DB_NAME}
+      STOCK_DB_USER: ${STOCK_DB_USER}
+      STOCK_DB_PASSWORD: ${STOCK_DB_PASSWORD}
+    volumes:
+      -./dags: /opt/airflow/dags
+      -./scripts: /opt/airflow/scripts
+      -airflow-logs: /opt/airflow/logs
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  airflow-meta-db:
+  stock-db-data:
+  airflow-logs:
+  # ./dags          #不需要，bind mount 是本地路径，已经存在
+
