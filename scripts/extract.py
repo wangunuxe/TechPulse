@@ -97,7 +97,7 @@ def fetch_all_stock():
 
 if __name__ == "__main__":
     data = download_price("LYFT")
-    #print(data.columns.tolist())
+    print(data.columns.tolist())
     #print(data.index)
     # print(data.index.name)
     # print(data)

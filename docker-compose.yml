@@ -2,9 +2,9 @@ services:
   postgres: #metadatabase
     image: postgres:15
     environment:
-      POSTGRES_USER:${POSTGRES_USER}
-      POSTGRES_PASSERWORD:${POSTGRES_PASSERWORD}
-      POSTGRES_DB:${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSEWORD: ${POSTGRES_PASSEWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "${POSTGRES_USER}"] 
       interval: 5s
@@ -22,7 +22,7 @@ services:
     ports: 
       - "5433:5432"
     volumes:
-      - stock-db-data:/var/lib/posgresql/data 
+      - stock-db-data:/var/lib/postgresql/data 
       - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   airflow-init:
@@ -58,9 +58,9 @@ services:
       STOCK_DB_USER: ${STOCK_DB_USER}
       STOCK_DB_PASSWORD: ${STOCK_DB_PASSWORD}
     volumes:
-      -./dags: /opt/airflow/dags # Bind mount 
-      -./scripts: /opt/airflow/scripts #Bind mount
-      -airflow-logs: /opt/airflow/logs
+      - ./dags:/opt/airflow/dags # Bind mount 
+      - ./scripts:/opt/airflow/scripts #Bind mount
+      - airflow-logs:/opt/airflow/logs
       # ./logs:/opt/airflow/logs   # 这样本地会出现一个 logs 文件夹
     depends_on:
       postgres:
@@ -82,9 +82,9 @@ services:
       STOCK_DB_USER: ${STOCK_DB_USER}
       STOCK_DB_PASSWORD: ${STOCK_DB_PASSWORD}
     volumes:
-      -./dags: /opt/airflow/dags
-      -./scripts: /opt/airflow/scripts
-      -airflow-logs: /opt/airflow/logs
+      - ./dags:/opt/airflow/dags
+      - ./scripts:/opt/airflow/scripts
+      - airflow-logs:/opt/airflow/logs
     depends_on:
       postgres:
         condition: service_healthy
