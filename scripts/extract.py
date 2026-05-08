@@ -46,13 +46,13 @@ TOP_50_TECH_TICKERS = [
     "035420.KS", # NAVER (Korea)
     "005930.KS", # Samsung (Korea)
     "SAP",   # SAP (Germany)
-    "NOKIA", # Nokia
     "ERIC",  # Ericsson
     "STM",   # STMicroelectronics
     "INFY",  # Infosys (India)
     "WIT",   # Wipro (India)
     "UBER",  # Uber
     "LYFT",  # Lyft
+    "TSM", 
 ]
 
 # DOWNLOAD STOCK PRICE
@@ -62,7 +62,8 @@ def download_price(ticker: str) ->pd.DataFrame:
     Download today's stock price for a given ticker.
     """
     stock = yf.Ticker(ticker)
-    hist = stock.history(period="1d") # Only fetch today's data
+    hist = stock.history(period="3mo") # Only fetch today's data
+    #print(type(hist))
     hist["ticker"] = ticker # Add ticker column
     return hist
 
@@ -78,7 +79,7 @@ def fetch_all_stock():
             df = download_price(ticker)
             if not df.empty:
                 all_data.append(df)
-                print(f"✅ {ticker} fetched successfully")
+                #print(f"✅ {ticker} fetched successfully")
             else:
                 print(f"⚠️ {ticker} returned empty data")
         except Exception as e:
@@ -87,14 +88,18 @@ def fetch_all_stock():
     if all_data:
         combined = pd.concat(all_data) # Merge all 50 DataFrames into one big DataFrame
         print(f"\n📊 Total records fetched: {len(combined)}")  # Print total number of rows
+        return combined
         print(combined[["ticker", "Open", "High", "Low", "Close", "Volume"]]) # Only display these 6 columns (ignore the rest)
     else:
         print("No data fetched.")
+        return None
 
 
 if __name__ == "__main__":
-    # data = download_price("LYFT")
-    # print(data.columns.tolist())
+    data = download_price("LYFT")
+    #print(data.columns.tolist())
+    #print(data.index)
+    # print(data.index.name)
     # print(data)
     # print(data.T) # Transpose — easier to read all fields
-    fetch_all_stock()
+    #fetch_all_stock()

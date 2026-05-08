@@ -50,7 +50,18 @@
 | **Docker** | Containerized environment |
 
 ---
+## Advanced version
+This project is built with a scalable and industry-relevant tech stack.
+**yfinance** handles data extraction from Yahoo Finance, **Apache Airflow**
+orchestrates and schedules the pipeline, **Apache Spark / Databricks**
+processes large-scale historical stock data, **PostgreSQL** stores the
+transformed data, and **Grafana** visualizes real-time dashboards.
 
+This stack covers the full spectrum of Data Engineering roles:
+Airflow → Data Engineer, Spark → Big Data Engineer,
+Databricks → Cloud Data Engineer.
+
+---
 ## 📁 Project Structure
 
 ```
