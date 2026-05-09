@@ -57,6 +57,7 @@ services:
       STOCK_DB_NAME: ${STOCK_DB_NAME}
       STOCK_DB_USER: ${STOCK_DB_USER}
       STOCK_DB_PASSWORD: ${STOCK_DB_PASSWORD}
+      _PIP_ADDITIONAL_REQUIREMENTS: "yfinance sqlalchemy psycopg2-binary python-dotenv"
     volumes:
       - ./dags:/opt/airflow/dags # Bind mount 
       - ./scripts:/opt/airflow/scripts #Bind mount
@@ -81,6 +82,7 @@ services:
       STOCK_DB_NAME: ${STOCK_DB_NAME}
       STOCK_DB_USER: ${STOCK_DB_USER}
       STOCK_DB_PASSWORD: ${STOCK_DB_PASSWORD}
+      _PIP_ADDITIONAL_REQUIREMENTS: "yfinance sqlalchemy psycopg2-binary python-dotenv"
     volumes:
       - ./dags:/opt/airflow/dags
       - ./scripts:/opt/airflow/scripts

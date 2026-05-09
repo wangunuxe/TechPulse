@@ -43,7 +43,7 @@ if __name__ == "__main__":
 
     # Step 2: Transform
     if raw_data is not None:
-        result = transform_intraday_return(raw_data)
+        result = transform_intraday_return()
 
         print("\n🏆 Top 5 Gainers:")
         print(result.head())

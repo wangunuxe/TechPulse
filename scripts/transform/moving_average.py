@@ -33,7 +33,7 @@ if __name__ == "__main__":
     from scripts.extract import fetch_all_stock
     raw_data = fetch_all_stock()
     if raw_data is not None:
-        clean_data = transform_moving_average(raw_data)
+        clean_data = transform_moving_average()
         print(clean_data)
         print(clean_data.columns.tolist())
     else:

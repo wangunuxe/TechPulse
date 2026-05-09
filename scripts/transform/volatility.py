@@ -35,7 +35,7 @@ if __name__ == "__main__" :
     from scripts.extract import fetch_all_stock
     raw_data = fetch_all_stock()
     if raw_data is not None:
-        clean_data=transform_volatility(raw_data)
+        clean_data=transform_volatility()
         print(clean_data)
     else:
         print("The raw_data failed to fetch")
