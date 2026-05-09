@@ -1,6 +1,12 @@
-import pandas as pd
+import sys
+import os
 
-def transform_intraday_return(df: pd.DataFrame)->pd.DataFrame:
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+
+import pandas as pd
+from scripts.load import read_raw
+
+def transform_intraday_return()->pd.DataFrame:
     """
     Calculate daily price change and percentage for each stock.
 
@@ -9,10 +15,11 @@ def transform_intraday_return(df: pd.DataFrame)->pd.DataFrame:
 
     (Close - Open) / Open
     """
-    result = df[["ticker", "Open", "Close"]].copy()
-    result["intraday_price_change"] = (result["Close"] - result["Open"]).round(2)
+    df = read_raw()
+    result = df[["ticker", "open", "close"]].copy()
+    result["intraday_price_change"] = (result["close"] - result["open"]).round(2)
     # Daily return = daily price change percentage
-    result["intraday_return_pct"] = ((result["Close"] - result["Open"]) / result["Open"] * 100).round(2)
+    result["intraday_return_pct"] = ((result["close"] - result["open"]) / result["open"] * 100).round(2)
 
     result["status"] = result["intraday_return_pct"].apply(
         lambda x: "Gain" if x > 0 else ("Loss" if x < 0 else "Flat")

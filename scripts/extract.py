@@ -62,7 +62,7 @@ def download_price(ticker: str) ->pd.DataFrame:
     Download today's stock price for a given ticker.
     """
     stock = yf.Ticker(ticker)
-    hist = stock.history(period="3mo") # Only fetch today's data
+    hist = stock.history(period="1y") # Only fetch today's data
     #print(type(hist))
     hist["ticker"] = ticker # Add ticker column
     return hist

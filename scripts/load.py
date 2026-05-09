@@ -3,7 +3,7 @@ from sqlalchemy import create_engine
 from dotenv import load_dotenv
 import os
 
-load_dotenv() #读取 .env 文件，把里面的变量加载到环境变量中
+load_dotenv(".env.local", override=True) #读取 .env 文件，把里面的变量加载到环境变量中
 
 DB_CONFIG = {
     "host":     os.getenv("STOCK_DB_HOST", "localhost"),  # Docker: stock-db, Local: localhost
@@ -57,7 +57,14 @@ def read_raw() ->pd.DataFrame:
     """Read raw stock data from PostgreSQL."""
     engine = get_engine()
     # PostgreSQL → DataFrame
-    df = pd.read_sql("SELECT * FROM raw_stock_prices", engine)
+    df = pd.read_sql('SELECT * FROM raw_stock_prices ORDER BY ticker, "Date"', engine)
+
+    # Rename all columns to lowercase
+    df.columns = df.columns.str.lower()
+
+    # Set date as index
+    df = df.set_index("date")
+    #print(df.columns.tolist())
     print(f"📊 {len(df)} records read from raw_stock_prices")
     return df
 
