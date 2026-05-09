@@ -91,9 +91,20 @@ services:
       postgres:
         condition: service_healthy
 
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+    - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_USER}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD}
+    volumes:
+    - grafana-data:/var/lib/grafana
+
 volumes:
   airflow-meta-db:
   stock-db-data:
   airflow-logs:
+  grafana-data:
   # ./dags          #不需要，bind mount 是本地路径，已经存在
 
