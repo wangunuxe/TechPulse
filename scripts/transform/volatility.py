@@ -1,13 +1,20 @@
-import pandas as pd
+import sys
+import os
 
-def transform_volatility(df: pd.DataFrame):
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+
+import pandas as pd
+from scripts.load import read_raw
+
+def transform_volatility():
     """
     
     """
     # overnight_return :(Close今 - Close昨) / Close昨
-    result = df[["Close", "ticker"]].copy()
+    df = read_raw()
+    result = df[["close", "ticker"]].copy()
     #result["overnight_return"] = df.groupby("ticker")["Close"].transform(lambda x : x.diff()/x.shift(1))
-    result["overnight_return"] = df.groupby("ticker")["Close"].transform(lambda x: x.pct_change())
+    result["overnight_return"] = df.groupby("ticker")["close"].transform(lambda x: x.pct_change())
 
     # volatility
     result["volatility"] = result.groupby("ticker")["overnight_return"].transform(lambda x : x.rolling(window=30).std())

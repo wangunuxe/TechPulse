@@ -1,16 +1,23 @@
-import pandas as pd
+import sys
+import os
 
-def transform_moving_average(df:pd.DataFrame ) -> pd.DataFrame:
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+
+import pandas as pd
+from scripts.load import read_raw
+
+def transform_moving_average() -> pd.DataFrame:
     """
     Calculate 7-day and 30-day Simple moving average for each stock.
 
     Input columns required: ticker, Close, Date(index)
     Output columns added: MA7, MA30, trend
     """
+    df = read_raw()
     result = df.copy()
-    result["MA7"] = df.groupby("ticker")["Close"].transform(lambda x: x.rolling(window=7).mean())
+    result["MA7"] = df.groupby("ticker")["close"].transform(lambda x: x.rolling(window=7).mean())
 
-    result["MA30"] = df.groupby("ticker")["Close"].transform(lambda x: x.rolling(window=30).mean())
+    result["MA30"] = df.groupby("ticker")["close"].transform(lambda x: x.rolling(window=30).mean())
 
     # Determine trend: MA7 > MA30 = Uptrend, MA7 < MA30 = Downtrend
     result["trend"] = result.apply(lambda row : "Uptrend" if row["MA7"] > row["MA30"] else ("Downtrend" if row["MA7"] < row["MA30"] else "Neutral"), axis = 1)

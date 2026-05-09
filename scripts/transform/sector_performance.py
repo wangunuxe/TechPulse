@@ -71,7 +71,7 @@ SECTOR_MAP = {
     "LYFT":      "Mobility",       # Lyft
 }
 
-def transform_sector_performace():
+def transform_sector_performance():
     """
     Calculate average intraday return per sector:
         get intraday_return_pct
@@ -97,5 +97,5 @@ def transform_sector_performace():
     return sector_performance
     
 if __name__ == "__main__":
-    clean_data = transform_sector_performace()
+    clean_data = transform_sector_performance()
     print(clean_data)

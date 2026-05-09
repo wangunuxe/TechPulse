@@ -2,7 +2,15 @@ import pandas as pd
 from sqlalchemy import create_engine
 from dotenv import load_dotenv
 import os
+import sys
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+from scripts.extract import fetch_all_stock
+
+# ============================================
+# GET ENGINE
+# ============================================
 load_dotenv(".env.local", override=True) #读取 .env 文件，把里面的变量加载到环境变量中
 
 DB_CONFIG = {
@@ -30,7 +38,9 @@ def get_engine():
 #         f"postgresql://{os.getenv('STOCK_DB_USER')}:{os.getenv('STOCK_DB_PASSWORD')}"
 #         f"@{os.getenv('STOCK_DB_HOST')}:5432/{os.getenv('STOCK_DB_NAME')}"
 #     )
-
+# ============================================
+# LOAD RAW DATA
+# ============================================
 def clean_columns(df:pd.DataFrame) ->pd.DataFrame:
     """Clean column names before loading to PostgreSQL."""
     # Drop unnecessary columns
@@ -52,6 +62,9 @@ def load_raw(df: pd.DataFrame) -> None:
         index=True, # 保留Date索引
     )
     print(f"✅ {len(df)} records loaded into raw_stock_prices")
+# ============================================
+# READ RAW DATA
+# ============================================
 
 def read_raw() ->pd.DataFrame:
     """Read raw stock data from PostgreSQL."""
@@ -68,20 +81,86 @@ def read_raw() ->pd.DataFrame:
     print(f"📊 {len(df)} records read from raw_stock_prices")
     return df
 
+# ============================================
+# LOAD TRANSFORMED DATA
+# ============================================
+
+def load_transformed(df: pd.DataFrame, table_name: str) -> None:
+    """
+    Generic function to load any transformed DataFrame into PostgreSQL.
+    
+    Args:
+        df: transformed DataFrame to load
+        table_name: target table name in PostgreSQL
+    """
+    engine = get_engine()
+    df.to_sql(
+        name=table_name,
+        con=engine,
+        if_exists="replace",  # Replace table on each run
+        index=True,
+    )
+    print(f"✅ {len(df)} records loaded into {table_name}")
+
+def load_daily_return():
+    from scripts.transform.daily_return import transform_intraday_return
+    load_transformed(transform_intraday_return(), "transformed_daily_return")
+
+def load_moving_average():
+    from scripts.transform.moving_average import transform_moving_average
+    load_transformed(transform_moving_average(),      "transformed_moving_average")
+
+def load_volatility():
+    from scripts.transform.volatility import transform_volatility
+    load_transformed(transform_volatility(),          "transformed_volatility")
+
+def load_volume_anomaly():
+    from scripts.transform.volume_anomaly import transform_volume_anomaly
+    load_transformed(transform_volume_anomaly(),      "transformed_volume_anomaly")
+
+def load_sector_performance():
+    from scripts.transform.sector_performance import transform_sector_performance
+    load_transformed(transform_sector_performance(),  "transformed_sector_performance")
+
+def load_correlation():
+    from scripts.transform.correlation import transform_correlation
+    load_transformed(transform_correlation(),         "transformed_correlation")
+
+# ============================================
+# READ TRANSFORMED DATA
+# ============================================
+
+def read_transformed(table_name: str) -> pd.DataFrame:
+    """
+    Generic function to read any transformed table from PostgreSQL.
+    
+    Args:
+        table_name: source table name in PostgreSQL
+    """
+    engine = get_engine()
+    df = pd.read_sql(
+        f"SELECT * FROM {table_name}",
+        engine,
+    )
+    print(f"📊 {len(df)} records read from {table_name}")
+    return df
+
 if __name__ == "__main__":
-    import sys
-    import os
-    sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+    #load_daily_return()
+    daily_return = read_transformed("transformed_daily_return")
+    #print(daily_return)
 
-    from scripts.extract import fetch_all_stock
+    #load_moving_average()
+    # load_volatility()
+    # load_volume_anomaly()
+    # load_sector_performance()
+    load_correlation()
 
-    # Step 1: Extract
-    raw_data = fetch_all_stock()
+    #moving_average  = read_transformed("transformed_moving_average")
+    # volatility      = read_transformed("transformed_volatility")
+    #volume_anomaly  = read_transformed("transformed_volume_anomaly")
+    # sector          = read_transformed("transformed_sector_performance")
+    correlation     = read_transformed("transformed_correlation")
 
-    # Step 2: Load
-    if raw_data is not None:
-        load_raw(raw_data)
+    print(correlation)
 
-        # Step 3: Verify
-        result = read_raw()
-        print(result.head())
