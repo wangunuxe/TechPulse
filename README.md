@@ -9,9 +9,9 @@
 | Stage | Status |
 |---|---|
 | Extract | ✅ Completed |
-| Transform | 🔄 In Progress |
-| Load | ⏳ Planned |
-| Visualize | ⏳ Planned |
+| Transform | ✅ Completed |
+| Load | ✅ Completed |
+| Visualize | 🔄 In Progress |
 
 ---
 
