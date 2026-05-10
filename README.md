@@ -203,7 +203,7 @@ Overall market sentiment was broadly bullish, with most stocks finishing in posi
 ### MA Trend Status — August 5, 2026
 ![MA Trend Status](viz/MA_Trend_Status.png)
 
-> 🔗 [View Live Dashboard](http://localhost:3000/d/adzmzp2/ma-trend-status-e28094-2026-05-08?orgId=1&from=2026-05-10T06:25:13.508Z&to=2026-05-10T12:25:13.508Z&timezone=browser&viewPanel=panel-1)
+> 🔗 [View Live Dashboard](http://localhost:3000/public-dashboards/17ee1d6aa2e241039c01913ef9e5c547)
 
 ### Description
 This horizontal bar chart visualizes the moving average trend status of a selection of stocks for the trading day of May 8, 2026, sourced from a PostgreSQL database and rendered via Grafana.
