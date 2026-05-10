@@ -200,6 +200,38 @@ Overall market sentiment was broadly bullish, with most stocks finishing in posi
 
 **Query**: Stocks filtered by most recent trading date, ordered by intraday_return_pct DESC
 
+### MA Trend Status — August 5, 2026
+![MA Trend Status](viz/MA_Trend_status.png)
+
+> 🔗 [View Live Dashboard](http://localhost:3000/d/adzmzp2/ma-trend-status-e28094-2026-05-08?orgId=1&from=2026-05-10T06:25:13.508Z&to=2026-05-10T12:25:13.508Z&timezone=browser&viewPanel=panel-1)
+
+### Description
+This horizontal bar chart visualizes the moving average trend status of a selection of stocks for the trading day of May 8, 2026, sourced from a PostgreSQL database and rendered via Grafana.
+
+Stocks are displayed alphabetically, with each bar indicating whether the stock is currently in an uptrend or downtrend based on its 7-day and 30-day moving averages.
+
+### Color Legend
+🟢 Green (Uptrend) — Stock's short-term MA is above long-term MA, indicating bullish momentum
+
+🔴 Red (Downtrend) — Stock's short-term MA is below long-term MA, indicating bearish momentum
+
+🟡 Yellow (Neutral) — No significant trend detected
+
+### Key Observations
+The majority of stocks are currently in an Uptrend, reflecting broad bullish market momentum on May 8, 2026
+
+INFY, META, NOW, SHOP, SNOW, TCEHY, WIT are the notable Downtrend stocks, suggesting bearish signals based on their moving averages
+
+Overall market sentiment is strongly bullish, with only a small minority of stocks showing downtrend signals
+
+### Data Source
+
+Database: PostgreSQL (transformed_moving_average table)
+
+Visualization: Grafana Bar Chart
+
+Query: Stocks filtered by most recent trading date, trend converted to numeric score via CASE WHEN statement
+
 ---
 
 ## 📝 License

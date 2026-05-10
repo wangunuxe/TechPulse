@@ -11,7 +11,7 @@ from scripts.extract import fetch_all_stock
 # ============================================
 # GET ENGINE
 # ============================================
-load_dotenv(".env.local", override=True) #读取 .env 文件，把里面的变量加载到环境变量中
+load_dotenv(".env", override=True) #读取 .env 文件，把里面的变量加载到环境变量中
 
 DB_CONFIG = {
     "host":     os.getenv("STOCK_DB_HOST", "localhost"),  # Docker: stock-db, Local: localhost
