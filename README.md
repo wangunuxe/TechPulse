@@ -11,7 +11,7 @@
 | Extract | ✅ Completed |
 | Transform | ✅ Completed |
 | Load | ✅ Completed |
-| Visualize | 🔄 In Progress |
+| Visualize | ✅ Completed |
 
 ---
 
@@ -201,7 +201,7 @@ Overall market sentiment was broadly bullish, with most stocks finishing in posi
 **Query**: Stocks filtered by most recent trading date, ordered by intraday_return_pct DESC
 
 ### MA Trend Status — August 5, 2026
-![MA Trend Status](viz/MA_Trend_status.png)
+![MA Trend Status](viz/MA_Trend_Status.png)
 
 > 🔗 [View Live Dashboard](http://localhost:3000/d/adzmzp2/ma-trend-status-e28094-2026-05-08?orgId=1&from=2026-05-10T06:25:13.508Z&to=2026-05-10T12:25:13.508Z&timezone=browser&viewPanel=panel-1)
 
