@@ -190,6 +190,7 @@ Overall market sentiment was broadly bullish, with most stocks finishing in posi
 Database: PostgreSQL (transformed_daily_return table)
 Visualization: Grafana Bar Chart
 Query: Stocks filtered by most recent trading date, ordered by intraday_return_pct DESC
+
 ---
 
 ## 📝 License
