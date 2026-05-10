@@ -81,6 +81,7 @@ def transform_sector_performance():
     """
     df = transform_intraday_return()
     result = df[["intraday_return_pct", "ticker"]].copy()
+    result["date"] = df.index
     #Map each ticker to its sector
     result["sector"] = result["ticker"].map(SECTOR_MAP)
 

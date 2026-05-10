@@ -14,6 +14,7 @@ def transform_correlation():
         columns="ticker",
         values="close"
     ).copy()
+    result["date"] = df.index
     # print(f"pivot shape: {result.shape}")
     # print(f"thresh: {len(result)//2}")
     # print(f"valid values per column:\n{result.count()}")

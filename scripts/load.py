@@ -11,7 +11,7 @@ from scripts.extract import fetch_all_stock
 # ============================================
 # GET ENGINE
 # ============================================
-load_dotenv(".env", override=True) #读取 .env 文件，把里面的变量加载到环境变量中
+load_dotenv(".env.local", override=True) #读取 .env 文件，把里面的变量加载到环境变量中
 
 DB_CONFIG = {
     "host":     os.getenv("STOCK_DB_HOST", "localhost"),  # Docker: stock-db, Local: localhost
@@ -98,7 +98,7 @@ def load_transformed(df: pd.DataFrame, table_name: str) -> None:
         name=table_name,
         con=engine,
         if_exists="replace",  # Replace table on each run
-        index=True,
+        index=False,
     )
     print(f"✅ {len(df)} records loaded into {table_name}")
 
@@ -146,21 +146,37 @@ def read_transformed(table_name: str) -> pd.DataFrame:
     return df
 
 if __name__ == "__main__":
-    #load_daily_return()
-    daily_return = read_transformed("transformed_daily_return")
-    #print(daily_return)
+    # load_daily_return()
+    # daily_return = read_transformed("transformed_daily_return")
+    # print(daily_return.columns.tolist())
+    # print(daily_return)
 
-    #load_moving_average()
+    load_moving_average()
+    moving_average = read_transformed("transformed_moving_average")
+    print(moving_average.columns.tolist())
+    print(moving_average)
+
+   
     # load_volatility()
+    # volatility = read_transformed("transformed_volatility")
+    # print(volatility.columns.tolist())
+    # print(volatility)
+
+
     # load_volume_anomaly()
+    # volume_anomaly  = read_transformed("transformed_volume_anomaly")
+    # print(volume_anomaly.columns.tolist())
+    # print(volume_anomaly)
+
+
     # load_sector_performance()
-    load_correlation()
+    # sector = read_transformed("transformed_sector_performance")
+    # print(sector.columns.tolist())
+    # print(sector)
 
-    #moving_average  = read_transformed("transformed_moving_average")
-    # volatility      = read_transformed("transformed_volatility")
-    #volume_anomaly  = read_transformed("transformed_volume_anomaly")
-    # sector          = read_transformed("transformed_sector_performance")
-    correlation     = read_transformed("transformed_correlation")
+    # load_correlation()
+    # correlation = read_transformed("transformed_correlation")
+    # print(correlation.columns.tolist())
+    # print(correlation)
 
-    print(correlation)
 

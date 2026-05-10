@@ -17,6 +17,7 @@ def transform_intraday_return()->pd.DataFrame:
     """
     df = read_raw()
     result = df[["ticker", "open", "close"]].copy()
+    result["date"] = df.index # ← 把 date 索引加为普通列
     result["intraday_price_change"] = (result["close"] - result["open"]).round(2)
     # Daily return = daily price change percentage
     result["intraday_return_pct"] = ((result["close"] - result["open"]) / result["open"] * 100).round(2)

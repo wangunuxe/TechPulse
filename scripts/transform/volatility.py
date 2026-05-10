@@ -13,6 +13,7 @@ def transform_volatility():
     # overnight_return :(Close今 - Close昨) / Close昨
     df = read_raw()
     result = df[["close", "ticker"]].copy()
+    result["date"] = df.index
     #result["overnight_return"] = df.groupby("ticker")["Close"].transform(lambda x : x.diff()/x.shift(1))
     result["overnight_return"] = df.groupby("ticker")["close"].transform(lambda x: x.pct_change())
 

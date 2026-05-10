@@ -15,6 +15,7 @@ def transform_moving_average() -> pd.DataFrame:
     """
     df = read_raw()
     result = df.copy()
+    result["date"] = df.index
     result["MA7"] = df.groupby("ticker")["close"].transform(lambda x: x.rolling(window=7).mean())
 
     result["MA30"] = df.groupby("ticker")["close"].transform(lambda x: x.rolling(window=30).mean())

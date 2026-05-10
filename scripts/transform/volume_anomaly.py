@@ -12,6 +12,7 @@ def transform_volume_anomaly():
     df = read_raw()
     #print(df.index)
     result = df[["volume", "ticker"]].copy()
+    result["date"] = df.index
     #Average volume over the past 30 days
     result["avg_volume"] = df.groupby("ticker")["volume"].transform(lambda x : x.rolling(window=30).mean())
     #How many times today's volume is compared to the average

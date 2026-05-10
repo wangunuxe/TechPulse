@@ -162,6 +162,36 @@ schedule_interval = "0 18 * * 1-5"
 
 ---
 
+## 📝 Data Visualization
+### Daily Intraday Return — August 5, 2026
+![Daily Intraday Return](viz/Daily_Intraday_Return_08052026.png)
+
+> 🔗 [View Live Dashboard](http://localhost:3000/public-dashboards/ae1cf38d4d3043fba476cc2fc1bc3847)
+
+#### Description
+This horizontal bar chart visualizes the intraday return percentage of a selection of stocks for the trading day of August 5, 2026, sourced from a PostgreSQL database and rendered via Grafana.
+Stocks are ranked in descending order from highest to lowest intraday return, providing a quick snapshot of the day's top performers and underperformers.
+#### Color Legend
+
+🟢 Green (5+) — Strong positive return, above +5%
+🟡 Yellow (0+) — Moderate positive return, between 0% and +5%
+🔴 Red (< 0) — Negative return, below 0%
+
+#### Key Observations
+
+INTC was the top performer of the day with an intraday return of +11.7%
+AMD, DDOG, PANW also posted strong gains above +7%
+The majority of stocks recorded modest positive returns between 0% and +5%
+NET, BIDU, UBER were the worst performers, with returns falling as low as -9.71%
+Overall market sentiment was broadly bullish, with most stocks finishing in positive territory
+
+#### Data Source
+
+Database: PostgreSQL (transformed_daily_return table)
+Visualization: Grafana Bar Chart
+Query: Stocks filtered by most recent trading date, ordered by intraday_return_pct DESC
+---
+
 ## 📝 License
 
 This project is licensed under the MIT License.
